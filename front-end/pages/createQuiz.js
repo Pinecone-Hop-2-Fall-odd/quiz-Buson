@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 export default function CreateQuiz() {
   const [quiz, setQuiz] = useState({
@@ -8,7 +9,7 @@ export default function CreateQuiz() {
     3: { answer: "", isCorrect: false },
   });
   const [checkValue, setCheckValue] = useState();
-  console.log("quiz", quiz);
+  // console.log("quiz", quiz);
 
   function handleQuestion(value) {
     setQuiz((prev) => ({ ...prev, question: value }));
@@ -34,8 +35,19 @@ export default function CreateQuiz() {
         }));
       });
   }
+
+  function handleSave() {
+    axios.post("http://localhost:8000/quiz", {
+      question: quiz.question,
+      answers: [quiz[0], quiz[1], quiz[2], quiz[3]],
+    });
+  }
   return (
-    <div>
+    <div className="flex justify-center">
+      <img
+        className="w-full h-full absolute"
+        src="https://geology.com/world/world-map.gif"
+      />
       <div>
         <input
           type="text"
@@ -108,6 +120,11 @@ export default function CreateQuiz() {
             style={{ color: "black" }}
             onChange={(e) => handleAnswer(3, e.target.value)}
           />
+        </div>
+        <div>
+          <button onClick={handleSave} className="bg-white text-black">
+            Save
+          </button>
         </div>
       </div>
     </div>

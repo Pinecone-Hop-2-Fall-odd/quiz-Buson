@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import { TestModel } from "./src/models/test-model.js";
+import { quizRouter } from "./src/routers/quiz-router.js";
 
 const app = express();
 
@@ -12,25 +13,13 @@ app.use(express.json());
 
 const connectDb = async () => {
   await mongoose.connect(
-    "mongodb+srv://Babbo2:test1234@cluster0.6s36tpo.mongodb.net/hello"
+    "mongodb+srv://Babbo2:test1234@cluster0.6s36tpo.mongodb.net/quiz"
   );
   console.log("database connected");
 };
 connectDb();
 
-app.get("/", async (req, res) => {
-  const data = await TestModel.find({});
-  console.log(data);
-  res.json({ data: data });
-});
-
-app.post("/", async (req, res) => {
-  await TestModel.create({
-    name: "hello",
-    age: 10,
-  });
-  res.status(200);
-});
+app.use(quizRouter);
 
 app.listen(8000, () => {
   console.log(`Your server running on: http://localhost:8000`);
